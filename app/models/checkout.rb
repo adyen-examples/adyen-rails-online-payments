@@ -8,14 +8,31 @@ require 'adyen-ruby-api-library'
 
 class Checkout < ApplicationRecord
   class << self; 
+    def find_currency(type)
+      # TODO: find currency for Drop-in
+      case type
+      when 'ideal', 'giropay', "klarna_paynow", "sepadirectdebit", "directEbanking"
+        return "EUR"
+      when "wechatpayqr", "alipay"
+        return "CNY"
+      when "dotpay"
+        return "PLN"
+      when "boletobancario"
+        return "BRL"
+      else
+        return "EUR"
+      end
+    end
+
     # Makes the /paymentMethods request
     # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/paymentMethods
-    def get_payment_methods
+    def get_payment_methods(type)
+      currency = find_currency(type)
+
       response = adyen_client.checkout.payment_methods({
         :merchantAccount => ENV["MERCHANT_ACCOUNT"],
-        :countryCode => 'NL',
         :amount => {
-          :currency => 'EUR',
+          :currency => currency,
           :value => 1000
         },
         :channel => 'Web'
@@ -27,16 +44,18 @@ class Checkout < ApplicationRecord
     # Makes the /payments request
     # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/payments
     def make_payment(payment_method)
+      currency = find_currency(payment_method["type"])
+
       response = adyen_client.checkout.payments({
         :amount => {
-          :currency => "EUR",
+          :currency => currency,
           :value => 1000
         },
         :shopperIP => "192.168.1.3",
         :channel => "Web",
         :reference => "12345",
         :additionalData => {
-          :executeThreeD => "true"
+          :allow3DS2 => "true"
         },
         :paymentMethod => payment_method,
         :returnUrl => "http://localhost:8080/handleShopperRedirect",

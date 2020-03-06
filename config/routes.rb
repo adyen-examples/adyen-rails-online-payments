@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resource :checkout, except: ["new"]
 
   root 'checkouts#index'
-  get 'checkout/preview', :to => 'checkouts#preview'
+  get 'preview', :to => 'checkouts#preview'
   post 'initiatePayment', :to => 'checkouts#initiate_payment'
   get 'handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
   post 'handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'

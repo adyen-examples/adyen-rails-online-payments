@@ -9,10 +9,11 @@ class CheckoutsController < ApplicationController
   end
 
   def get_payment_methods
+     @type = params[:type]
     # The call to /paymentMethods will be made as the checkout page is requested.
     # The response will be passed to the front end via an instance variable,
     # which will be used to configure the instance of `AdyenCheckout`
-    payment_methods_response = Checkout.get_payment_methods.body
+    payment_methods_response = Checkout.get_payment_methods(@type).body
 
     @resp = payment_methods_response
     @origin_key = ENV["ORIGIN_KEY"]
