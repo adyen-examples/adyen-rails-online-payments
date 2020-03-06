@@ -24,70 +24,43 @@ class CheckoutsController < ApplicationController
   end
 
   def initiate_payment
-    # The call to /payments will be made as the shopper makes a payment.
+    # The call to /payments will be made as the shopper selects the pay button.
     payment_response = Checkout.make_payment(params["paymentMethod"])
-    
-    # The Adyen API Library for Ruby currently returns a `Faraday` object with a
-    # `body` parameter, so we'll need to do some quick parsing of the response.
     payment_response_hash = JSON.parse(payment_response.body)
 
     result_code = payment_response_hash["resultCode"]
-
-    # Alternatively, you can build your controller logic to first check for
-    # an `action` object in the /payments response. For example, Drop-in will
-    # automatically handle `action` objects and perform additional front-end
-    # actions on its own (depending on `action.type`).
-    # For more details: https://docs.adyen.com/checkout/drop-in-web#step-4-additional-front-end
     action = payment_response_hash["action"]
     paymentMethodType = params["paymentMethod"]["type"]
 
-    case result_code
-      when "Authorised"
-        redirect_to '/checkout/confirmation'
-      when "RedirectShopper"
-        if paymentMethodType == "ideal"
-          redirect_to payment_response_hash["redirect"]["url"]
-        end
+    session[:payment_data] = payment_response_hash["paymentData"]
 
-        if paymentMethodType == "scheme"
-          # For the purpose of this demo, payment data is saved in a Rails session.
-          # It is up to you how you choose to handle state (that is, keeping it
-          # on the client side versus connecting to a database).
-          session[:payment_data] = payment_response_hash["paymentData"]
-          render json: action
-        end
-      when "Error"
-        # Generic error page
-        redirect_to '/checkout/error'
-      else
-        # Handle other results
-        # https://docs.adyen.com/checkout/payment-result-codes
-    end
+    render json: { action: action, resultCode: result_code, paymentMethodType: paymentMethodType }
   end
 
-  def details
+  def handle_shopper_redirect
     payload = {}
-    details = {}
-    details["MD"] = params["MD"]
-    details["PaRes"] = params["PaRes"]
-    payload["details"] = details
+    payload["details"] = params
     payload["paymentData"] = session[:payment_data]
 
-    # The call to /payments/details will be made to submit 3D Secure 2
-    # authentication results and to complete the payment.
     resp = Checkout.submit_details(payload)
     resp_hash = JSON.parse(resp.body)
 
     session[:payment_data] = ""
-
-    if resp_hash["resultCode"] == "Authorised"
-      redirect_to '/checkout/confirmation'
-    else
-      redirect_to '/checkout/error'
+    
+    case resp_hash["resultCode"]
+      when "Authorised"
+        redirect_to '/success'
+      when "Pending"
+        redirect_to '/pending'
+      when "Refused"
+        redirect_to '/failed'
+      else
+        redirect_to '/error'
     end
   end
 
-  def confirmation
+  def submit_additional_details
+    # TODO
   end
 
   def error

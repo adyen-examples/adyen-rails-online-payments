@@ -41,70 +41,55 @@
           value: 1000,
           currency: "EUR"
         }
-      },
+      }
     },
-    onSubmit: handleOnSubmit,
-    onAdditionalDetails: handleOnAdditionalDetails
+    onSubmit: (state, component) => {
+      handleSubmission(state, component, "/initiatePayment");
+    },
+    onAdditionalDetails: (state, component) => {
+      handleSubmission(state, component, "/submitAdditionalDetails");
+    }
   };
 
-  // handleOnSubmit() is invoked when the shopper selects the Pay button.
+  // Calls your server endpoints
+  function callServer(url, data) {
+    return fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(res => res.json());
+  }
 
-  // makePayment() hits the server's #create endpoint (see available routes in
-  // config/routes.rb) which will make the API call to /payments.
-
-  // In this demo, Ajax was chosen over Fetch API for browser support
-  // (i.e., Internet Explorer), but you should use what's best for your user base.
-  function handleOnSubmit(state, dropin) {
-    function makePayment(data) {
-      return $.ajax({
-        method: "POST",
-        url: "/initiatePayment",
-        data
-      });
-    }
-
-    if (state.isValid) {
-      makePayment(state.data)
-        .then(res => {
-          // In this demo, we built our controller to handle all routing logic.
-          // Rails may pass a Turbolinks response back to the front end, so
-          // we'll need to check here if the response is actually an `action`
-          // object from calling /payments.
-
-          // Alternatively, you can conditionally render different view outcomes by
-          // passing payment result codes from the controller to your view
-          // (i.e., handling the logic instead on your front end)
-          if (res.paymentData) {
-            dropin.handleAction(res);
-          }
-        })
-        .catch(error => {
-          throw Error(error);
-        });
+  // Handles responses sent from your server to the client
+  function handleServerResponse(res, component) {
+    if (res.action) {
+      component.handleAction(res.action);
+    } else {
+      switch (res.resultCode) {
+        case "Authorised":
+          window.location.href = "/success";
+          break;
+        case "Pending":
+          window.location.href = "/pending";
+          break;
+        case "Refused":
+          window.location.href = "/failed";
+          break;
+        default:
+          window.location.href = "/error";
+          break;
+      }
     }
   }
 
-  // handleAdditionalDetails() is triggered for QR codes and for native
-  // 3D Secure 2 authentication.
-
-  // Otherwise, the same rules apply for either event hndler
-  // (i.e., handleOnSubmit() and handleOnAdditionalDetails())
-  function handleOnAdditionalDetails(state, dropin) {
-    function makeDetailsCall(data) {
-      return $.ajax({
-        method: "POST",
-        url: "/checkout/details",
-        data
-      });
-    }
-
+  // Event handlers called when the shopper selects the pay button,
+  // or when additional information is required to complete the payment
+  function handleSubmission(state, component, url) {
     if (state.isValid) {
-      makeDetailsCall(state.data)
-        .then(res => {
-          if (res.paymentData) {
-            dropin.handleAction(res);
-          }
-        })
+      callServer(url, state.data)
+        .then(res => handleServerResponse(res, component))
         .catch(error => {
           throw Error(error);
         });
@@ -113,11 +98,5 @@
 
   const checkout = new AdyenCheckout(configuration);
 
-  // Note that both Drop-in and Component integrations can read the same nested
-  // `paymentMethodsConfiguration` object. If you are just integrating a
-  // Component, passing a flat configuration object into create() works fine, too.
-
-  const integration = checkout
-    .create(type)
-    .mount(document.getElementById(type));
+  const integration = checkout.create(type).mount(document.getElementById(type));
 </script>

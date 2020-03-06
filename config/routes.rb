@@ -2,11 +2,11 @@ Rails.application.routes.draw do
   resource :checkout, except: ["new"]
 
   root 'checkouts#index'
-  post 'initiatePayment', :to => 'checkouts#initiate_payment'
   get 'checkout/preview', :to => 'checkouts#preview'
-  get 'checkout/confirmation', :to => 'checkouts#confirmation'
-
-  post 'checkout/confirmation', :to => 'checkouts#details'
+  post 'initiatePayment', :to => 'checkouts#initiate_payment'
+  get 'handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
+  post 'handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
+  post 'submitAdditionalDetails', :to => 'checkouts#submit_additional_details'
 
   # Payment results
   get 'error', :to => 'checkouts#error'

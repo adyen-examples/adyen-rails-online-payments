@@ -39,7 +39,7 @@ class Checkout < ApplicationRecord
           :executeThreeD => "true"
         },
         :paymentMethod => payment_method,
-        :returnUrl => "http://localhost:8080/checkout/confirmation",
+        :returnUrl => "http://localhost:8080/handleShopperRedirect",
         :merchantAccount => ENV["MERCHANT_ACCOUNT"],
         :browserInfo => {
           :userAgent => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
