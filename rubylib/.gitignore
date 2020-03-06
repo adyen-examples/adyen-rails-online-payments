@@ -1,0 +1,13 @@
+design.txt
+/Gemfile.lock
+*.gem
+
+# VSCode
+.vs
+*.code-workspace
+
+.rspec
+.rspec_status
+
+.bundle
+.ruby-version

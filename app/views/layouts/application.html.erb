@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<script src="https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.6.0/adyen.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+
+<link rel="stylesheet" href="https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.6.0/adyen.css"/>
+
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <header id="header">
+     <a href="/">
+       <%= image_tag ("mystore-logo.svg") %>
+     </a>
+  </header>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+<title>Integration: <%= @type %></title>
+
+# Hidden divs with data passed from the Rails server
+<div id="paymentMethodsResponse" class="hidden"><%= raw @resp %></div>
+<div id="originKey" class="hidden"><%= @origin_key %></div>
+<div id="type" class="hidden"><%= @type %></div>
+
+<div id="whole-page">
+  <div id="container">
+    <%= render partial: "customer_form" %>
+    <!--  The checkout integration will be dynamically rendered here -->
+    <!-- e.g., "dropin", "card", "ideal", etc. will be represent the `id` below-->
+    <div class="<%= "payment-container" unless @type == "dropin" %>">
+      <div id=<%= @type %> class="<%= "payment" unless @type == "dropin" %>"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const paymentMethodsResponse = JSON.parse(
+    document.getElementById("paymentMethodsResponse").innerHTML
+  );
+  const originKey = document.getElementById("originKey").innerHTML;
+  const type = document.getElementById("type").innerHTML;
+  
+  const configuration = {
+    paymentMethodsResponse,
+    originKey,
+    locale: "en_US",
+    environment: "test",
+    showPayButton: true,
+    paymentMethodsConfiguration: {
+      ideal: {
+        showImage: true
+      },
+      card: {
+        hasHolderName: true,
+        holderNameRequired: true,
+        name: "Credit or debit card",
+        amount: {
+          value: 1000,
+          currency: "EUR"
+        }
+      },
+    },
+    onSubmit: handleOnSubmit,
+    onAdditionalDetails: handleOnAdditionalDetails
+  };
+
+  // handleOnSubmit() is invoked when the shopper selects the Pay button.
+
+  // makePayment() hits the server's #create endpoint (see available routes in
+  // config/routes.rb) which will make the API call to /payments.
+
+  // In this demo, Ajax was chosen over Fetch API for browser support
+  // (i.e., Internet Explorer), but you should use what's best for your user base.
+  function handleOnSubmit(state, dropin) {
+    function makePayment(data) {
+      return $.ajax({
+        method: "POST",
+        url: "/checkout",
+        data
+      });
+    }
+
+    if (state.isValid) {
+      makePayment(state.data)
+        .then(res => {
+          // In this demo, we built our controller to handle all routing logic.
+          // Rails may pass a Turbolinks response back to the front end, so
+          // we'll need to check here if the response is actually an `action`
+          // object from calling /payments.
+
+          // Alternatively, you can conditionally render different view outcomes by
+          // passing payment result codes from the controller to your view
+          // (i.e., handling the logic instead on your front end)
+          if (res.paymentData) {
+            dropin.handleAction(res);
+          }
+        })
+        .catch(error => {
+          throw Error(error);
+        });
+    }
+  }
+
+  // handleAdditionalDetails() is triggered for QR codes and for native
+  // 3D Secure 2 authentication.
+
+  // Otherwise, the same rules apply for either event hndler
+  // (i.e., handleOnSubmit() and handleOnAdditionalDetails())
+  function handleOnAdditionalDetails(state, dropin) {
+    function makeDetailsCall(data) {
+      return $.ajax({
+        method: "POST",
+        url: "/checkout/details",
+        data
+      });
+    }
+
+    if (state.isValid) {
+      makeDetailsCall(state.data)
+        .then(res => {
+          if (res.paymentData) {
+            dropin.handleAction(res);
+          }
+        })
+        .catch(error => {
+          throw Error(error);
+        });
+    }
+  }
+
+  const checkout = new AdyenCheckout(configuration);
+
+  // Note that both Drop-in and Component integrations can read the same nested
+  // `paymentMethodsConfiguration` object. If you are just integrating a
+  // Component, passing a flat configuration object into create() works fine, too.
+
+  const integration = checkout
+    .create(type)
+    .mount(document.getElementById(type));
+</script>
