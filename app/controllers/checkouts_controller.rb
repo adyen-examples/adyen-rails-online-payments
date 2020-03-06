@@ -8,7 +8,7 @@ class CheckoutsController < ApplicationController
     @type = params[:type]
   end
 
-  def new
+  def get_payment_methods
     # The call to /paymentMethods will be made as the checkout page is requested.
     # The response will be passed to the front end via an instance variable,
     # which will be used to configure the instance of `AdyenCheckout`
@@ -23,7 +23,7 @@ class CheckoutsController < ApplicationController
     render 'payment_template'
   end
 
-  def create
+  def initiate_payment
     # The call to /payments will be made as the shopper makes a payment.
     payment_response = Checkout.make_payment(params["paymentMethod"])
     
@@ -91,5 +91,14 @@ class CheckoutsController < ApplicationController
   end
 
   def error
+  end
+
+  def failed
+  end
+
+  def pending
+  end
+
+  def success
   end
 end
