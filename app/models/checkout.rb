@@ -43,7 +43,7 @@ class Checkout < ApplicationRecord
 
     # Makes the /payments request
     # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/payments
-    def make_payment(payment_method)
+    def make_payment(payment_method, risk_data, browser_info)
       currency = find_currency(payment_method["type"])
 
       response = adyen_client.checkout.payments({
@@ -55,15 +55,13 @@ class Checkout < ApplicationRecord
         :channel => "Web",
         :reference => "12345",
         :additionalData => {
-          :allow3DS2 => "true"
+          :executeThreeD => "true"
         },
-        :paymentMethod => payment_method,
         :returnUrl => "http://localhost:8080/handleShopperRedirect",
         :merchantAccount => ENV["MERCHANT_ACCOUNT"],
-        :browserInfo => {
-          :userAgent => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
-          :acceptHeader => "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
-        }
+        :paymentMethod => payment_method,
+        :browserInfo => browser_info,
+        :riskData => risk_data
       })
 
       response

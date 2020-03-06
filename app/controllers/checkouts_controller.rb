@@ -26,7 +26,7 @@ class CheckoutsController < ApplicationController
 
   def initiate_payment
     # The call to /payments will be made as the shopper selects the pay button.
-    payment_response = Checkout.make_payment(params["paymentMethod"])
+    payment_response = Checkout.make_payment(params["paymentMethod"], params["riskData"].to_json, params["browserInfo"].to_json)
     payment_response_hash = JSON.parse(payment_response.body)
 
     result_code = payment_response_hash["resultCode"]
