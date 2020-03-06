@@ -60,7 +60,17 @@ class CheckoutsController < ApplicationController
   end
 
   def submit_additional_details
-    # TODO
+    payload = {}
+    payload["details"] = params["details"]
+    payload["paymentData"] = params["paymentData"]
+
+    resp = Checkout.submit_details(payload)
+    resp_hash = JSON.parse(resp.body)
+
+    action = resp_hash["action"]
+    resultCode = resp_hash["resultCode"]
+
+    render json: { action: action, resultCode: result_code }
   end
 
   def error
