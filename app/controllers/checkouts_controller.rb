@@ -34,7 +34,7 @@ class CheckoutsController < ApplicationController
     paymentMethodType = params["paymentMethod"]["type"]
 
     session[:payment_data] = payment_response_hash["paymentData"]
-
+    
     render json: { action: action, resultCode: result_code, paymentMethodType: paymentMethodType }
   end
 
@@ -47,7 +47,7 @@ class CheckoutsController < ApplicationController
     resp_hash = JSON.parse(resp.body)
 
     session[:payment_data] = ""
-    
+
     case resp_hash["resultCode"]
       when "Authorised"
         redirect_to '/success'

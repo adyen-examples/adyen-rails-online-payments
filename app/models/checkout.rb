@@ -7,10 +7,11 @@
 require 'adyen-ruby-api-library'
 
 class Checkout < ApplicationRecord
-  class << self; 
+  class << self;
     def find_currency(type)
-      # TODO: find currency for Drop-in
       case type
+      when 'ach'
+        return "USD"
       when 'ideal', 'giropay', "klarna_paynow", "sepadirectdebit", "directEbanking"
         return "EUR"
       when "wechatpayqr", "alipay"
@@ -27,14 +28,8 @@ class Checkout < ApplicationRecord
     # Makes the /paymentMethods request
     # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/paymentMethods
     def get_payment_methods(type)
-      currency = find_currency(type)
-
       response = adyen_client.checkout.payment_methods({
         :merchantAccount => ENV["MERCHANT_ACCOUNT"],
-        :amount => {
-          :currency => currency,
-          :value => 1000
-        },
         :channel => 'Web'
       })
 
