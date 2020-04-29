@@ -52,7 +52,7 @@ ORIGIN_KEY: "YOUR_ORIGIN_KEY_HERE"
 2. Start the rails server (and run any migrations if prompted):
 
 ```
-rails s
+bundle exec rails s
 ```
 
 3. Visit [http://localhost:8080/](http://localhost:8080/) (**app/views/checkouts/index.html.erb**) to select an integration type.
