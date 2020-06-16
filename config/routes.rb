@@ -3,10 +3,12 @@ Rails.application.routes.draw do
 
   root 'checkouts#index'
   get 'preview', :to => 'checkouts#preview'
-  post 'initiatePayment', :to => 'checkouts#initiate_payment'
-  get 'handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
-  post 'handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
-  post 'submitAdditionalDetails', :to => 'checkouts#submit_additional_details'
+  
+  # APIs
+  post 'api/initiatePayment', :to => 'checkouts#initiate_payment'
+  get 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
+  post 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
+  post 'api/submitAdditionalDetails', :to => 'checkouts#submit_additional_details'
 
   # Payment results
   get 'error', :to => 'checkouts#error'

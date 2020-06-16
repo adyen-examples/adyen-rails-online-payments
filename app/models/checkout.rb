@@ -52,7 +52,7 @@ class Checkout < ApplicationRecord
         :additionalData => {
           :executeThreeD => "true"
         },
-        :returnUrl => "http://localhost:8080/handleShopperRedirect",
+        :returnUrl => "http://localhost:8080/api/handleShopperRedirect",
         :merchantAccount => ENV["MERCHANT_ACCOUNT"],
         :paymentMethod => payment_method,
         :browserInfo => browser_info,
