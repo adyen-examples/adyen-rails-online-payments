@@ -38,7 +38,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'faraday'
 
-gem 'adyen-ruby-api-library', path: "rubylib"
+gem 'adyen-ruby-api-library'
 
 gem "rubyzip", ">= 1.3.0"
 

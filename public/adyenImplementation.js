@@ -12,7 +12,7 @@ const configuration = {
   showPayButton: true,
   paymentMethodsConfiguration: {
     ideal: {
-      showImage: true
+      showImage: true,
     },
     card: {
       hasHolderName: true,
@@ -20,16 +20,16 @@ const configuration = {
       name: "Credit or debit card",
       amount: {
         value: 1000,
-        currency: "EUR"
-      }
-    }
+        currency: "EUR",
+      },
+    },
   },
   onSubmit: (state, component) => {
     handleSubmission(state, component, "/api/initiatePayment");
   },
   onAdditionalDetails: (state, component) => {
     handleSubmission(state, component, "/api/submitAdditionalDetails");
-  }
+  },
 };
 
 // Calls your server endpoints
@@ -38,9 +38,9 @@ function callServer(url, data) {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(res => res.json());
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
 }
 
 // Handles responses sent from your server to the client
@@ -70,8 +70,8 @@ function handleServerResponse(res, component) {
 function handleSubmission(state, component, url) {
   if (state.isValid) {
     callServer(url, state.data)
-      .then(res => handleServerResponse(res, component))
-      .catch(error => {
+      .then((res) => handleServerResponse(res, component))
+      .catch((error) => {
         throw Error(error);
       });
   }

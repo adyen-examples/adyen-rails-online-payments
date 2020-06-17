@@ -1,9 +1,3 @@
-PATH
-  remote: rubylib
-  specs:
-    adyen-ruby-api-library (2.0.0)
-      faraday
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -50,6 +44,8 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    adyen-ruby-api-library (4.2.0)
+      faraday
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
@@ -221,7 +217,7 @@ DEPENDENCIES
   actionview (>= 5.2.4.2)
   activestorage (>= 5.2.4.3)
   activesupport (>= 5.2.4.3)
-  adyen-ruby-api-library!
+  adyen-ruby-api-library
   better_errors
   binding_of_caller
   bootsnap (>= 1.1.0)

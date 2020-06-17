@@ -13,11 +13,10 @@ class CheckoutsController < ApplicationController
     # The call to /paymentMethods will be made as the checkout page is requested.
     # The response will be passed to the front end via an instance variable,
     # which will be used to configure the instance of `AdyenCheckout`
-    payment_methods_response = Checkout.get_payment_methods(@type).body
+    payment_methods_response = Checkout.get_payment_methods(@type).response.to_json
 
     @resp = payment_methods_response
     @origin_key = ENV["ORIGIN_KEY"]
-    @type = params[:type]
 
     # The payment template (payment_template.html.erb) will be rendered with the
     # appropriate integration type (based on the params supplied).
@@ -26,14 +25,13 @@ class CheckoutsController < ApplicationController
 
   def initiate_payment
     # The call to /payments will be made as the shopper selects the pay button.
-    payment_response = Checkout.make_payment(params["paymentMethod"], params["riskData"].to_json, params["browserInfo"].to_json)
-    payment_response_hash = JSON.parse(payment_response.body)
+    payment_response = Checkout.make_payment(params["paymentMethod"], params["riskData"].to_json, params["browserInfo"].to_json).response
 
-    result_code = payment_response_hash["resultCode"]
-    action = payment_response_hash["action"]
+    result_code = payment_response["resultCode"]
+    action = payment_response["action"]
     paymentMethodType = params["paymentMethod"]["type"]
 
-    session[:payment_data] = payment_response_hash["paymentData"]
+    session[:payment_data] = payment_response["paymentData"]
     
     render json: { action: action, resultCode: result_code, paymentMethodType: paymentMethodType }
   end
@@ -43,12 +41,11 @@ class CheckoutsController < ApplicationController
     payload["details"] = params
     payload["paymentData"] = session[:payment_data]
 
-    resp = Checkout.submit_details(payload)
-    resp_hash = JSON.parse(resp.body)
+    resp = Checkout.submit_details(payload).response
 
     session[:payment_data] = ""
 
-    case resp_hash["resultCode"]
+    case resp["resultCode"]
       when "Authorised"
         redirect_to '/success'
       when "Pending"
@@ -65,11 +62,10 @@ class CheckoutsController < ApplicationController
     payload["details"] = params["details"]
     payload["paymentData"] = params["paymentData"]
 
-    resp = Checkout.submit_details(payload)
-    resp_hash = JSON.parse(resp.body)
+    resp = Checkout.submit_details(payload).response
 
-    action = resp_hash["action"]
-    resultCode = resp_hash["resultCode"]
+    action = resp["action"]
+    resultCode = resp["resultCode"]
 
     render json: { action: action, resultCode: result_code }
   end
