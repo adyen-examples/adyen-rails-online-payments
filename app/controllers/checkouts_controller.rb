@@ -16,7 +16,7 @@ class CheckoutsController < ApplicationController
     payment_methods_response = Checkout.get_payment_methods(@type).response.to_json
 
     @resp = payment_methods_response
-    @origin_key = ENV["ORIGIN_KEY"]
+    @client_key = ENV["CLIENT_KEY"]
 
     # The payment template (payment_template.html.erb) will be rendered with the
     # appropriate integration type (based on the params supplied).

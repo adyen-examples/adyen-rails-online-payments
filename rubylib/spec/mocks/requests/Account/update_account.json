@@ -1,7 +1,0 @@
-{
-  "accountCode": "CODE_OF_ACCOUNT",
-  "payoutSchedule": {
-    "schedule": "WEEKLY",
-    "action": "CLOSE"
-  }
-}
