@@ -4,8 +4,24 @@ const paymentMethodsResponse = JSON.parse(
 const clientKey = document.getElementById("clientKey").innerHTML;
 const type = document.getElementById("type").innerHTML;
 
+function filterUnimplemented(pm) {
+    pm.paymentMethods = pm.paymentMethods.filter((it) =>
+      [
+        "scheme",
+        "ideal",
+        "dotpay",
+        "giropay",
+        "sepadirectdebit",
+        "directEbanking",
+        "ach",
+        "alipay",
+      ].includes(it.type)
+    );
+    return pm;
+  }
+
 const configuration = {
-  paymentMethodsResponse,
+  paymentMethodsResponse: filterUnimplemented(paymentMethodsResponse),
   clientKey,
   locale: "en_US",
   environment: "test",
