@@ -27,7 +27,7 @@ class Checkout < ApplicationRecord
 
     # Makes the /paymentMethods request
     # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/paymentMethods
-    def get_payment_methods(type)
+    def get_payment_methods()
       response = adyen_client.checkout.payment_methods({
         :merchantAccount => ENV["MERCHANT_ACCOUNT"],
         :channel => 'Web'

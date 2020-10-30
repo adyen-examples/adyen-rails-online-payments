@@ -1,19 +1,17 @@
 <title>Integration: <%= @type %></title>
 
 # Hidden divs with data passed from the Rails server
-<div id="paymentMethodsResponse" class="hidden"><%= raw @resp %></div>
 <div id="clientKey" class="hidden"><%= @client_key %></div>
 <div id="type" class="hidden"><%= @type %></div>
 
 <div id="payment-page">
   <div class="container">
-    <%= render partial: "customer_form" %>
     <!--  The checkout integration will be dynamically rendered here -->
     <!-- e.g., "dropin", "card", "ideal", etc. will be represent the `id` below-->
-    <div class="<%= "payment-container" unless @type == "dropin" %>">
-      <div id=<%= @type %> class="<%= "payment" unless @type == "dropin" %>"></div>
+    <div class="payment-container">
+      <div id=<%= @type %> class="payment"></div>
     </div>
   </div>
 </div>
 
-<%= javascript_include_tag "/adyenImplementation" %>
+<%= javascript_include_tag 'adyenImplementation', 'data-turbolinks-track': 'reload' %>

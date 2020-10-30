@@ -8,14 +8,8 @@ class CheckoutsController < ApplicationController
     @type = params[:type]
   end
 
-  def get_payment_methods
-     @type = params[:type]
-    # The call to /paymentMethods will be made as the checkout page is requested.
-    # The response will be passed to the front end via an instance variable,
-    # which will be used to configure the instance of `AdyenCheckout`
-    payment_methods_response = Checkout.get_payment_methods(@type).response.to_json
-
-    @resp = payment_methods_response
+  def checkout
+    @type = params[:type]
     @client_key = ENV["CLIENT_KEY"]
 
     # The payment template (payment_template.html.erb) will be rendered with the
@@ -23,17 +17,26 @@ class CheckoutsController < ApplicationController
     render 'payment_template'
   end
 
+  def result
+    @type = params[:type]
+  end
+
+  def get_payment_methods
+    # The call to /paymentMethods will be made as the checkout page is requested.
+    # The response will be passed to the front end,
+    # which will be used to configure the instance of `AdyenCheckout`
+    payment_methods_response = Checkout.get_payment_methods().response.to_json
+
+    render json: payment_methods_response
+  end
+
   def initiate_payment
     # The call to /payments will be made as the shopper selects the pay button.
     payment_response = Checkout.make_payment(params["paymentMethod"], params["riskData"].to_json, params["browserInfo"].to_json).response
 
-    result_code = payment_response["resultCode"]
-    action = payment_response["action"]
-    paymentMethodType = params["paymentMethod"]["type"]
-
     session[:payment_data] = payment_response["paymentData"]
     
-    render json: { action: action, resultCode: result_code, paymentMethodType: paymentMethodType }
+    render json: payment_response
   end
 
   def handle_shopper_redirect
@@ -47,13 +50,13 @@ class CheckoutsController < ApplicationController
 
     case resp["resultCode"]
       when "Authorised"
-        redirect_to '/success'
-      when "Pending"
-        redirect_to '/pending'
+        redirect_to '/result/success'
+      when "Pending", "Received"
+        redirect_to '/result/pending'
       when "Refused"
-        redirect_to '/failed'
+        redirect_to '/result/failed'
       else
-        redirect_to '/error'
+        redirect_to '/result/error'
     end
   end
 
@@ -64,21 +67,6 @@ class CheckoutsController < ApplicationController
 
     resp = Checkout.submit_details(payload).response
 
-    action = resp["action"]
-    resultCode = resp["resultCode"]
-
-    render json: { action: action, resultCode: result_code }
-  end
-
-  def error
-  end
-
-  def failed
-  end
-
-  def pending
-  end
-
-  def success
+    render json: resp
   end
 end

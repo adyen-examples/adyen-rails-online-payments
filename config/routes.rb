@@ -3,18 +3,14 @@ Rails.application.routes.draw do
 
   root 'checkouts#index'
   get 'preview', :to => 'checkouts#preview'
-  
+  get 'checkout/:type', :to => 'checkouts#checkout'
+  # Payment results
+  get 'result/:type', :to => 'checkouts#result'
+
   # APIs
+  post 'api/getPaymentMethods', :to => 'checkouts#get_payment_methods'
   post 'api/initiatePayment', :to => 'checkouts#initiate_payment'
   get 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
   post 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
   post 'api/submitAdditionalDetails', :to => 'checkouts#submit_additional_details'
-
-  # Payment results
-  get 'error', :to => 'checkouts#error'
-  get 'failed', :to => 'checkouts#failed'
-  get 'pending', :to => 'checkouts#pending'
-  get 'success', :to => 'checkouts#success'
-  
-  get 'checkout/:type', :to => 'checkouts#get_payment_methods'
 end
