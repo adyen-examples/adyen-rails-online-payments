@@ -1,4 +1,4 @@
-require 'json'
+require "json"
 
 class CheckoutsController < ApplicationController
   def index
@@ -14,7 +14,7 @@ class CheckoutsController < ApplicationController
 
     # The payment template (payment_template.html.erb) will be rendered with the
     # appropriate integration type (based on the params supplied).
-    render 'payment_template'
+    render "payment_template"
   end
 
   def result
@@ -32,31 +32,27 @@ class CheckoutsController < ApplicationController
 
   def initiate_payment
     # The call to /payments will be made as the shopper selects the pay button.
-    payment_response = Checkout.make_payment(params["paymentMethod"], params["riskData"].to_json, params["browserInfo"].to_json).response
+    payment_response = Checkout.make_payment(params["paymentMethod"], params["riskData"].to_json, params["browserInfo"].to_json, request.remote_ip).response
 
-    session[:payment_data] = payment_response["paymentData"]
-    
     render json: payment_response
   end
 
   def handle_shopper_redirect
     payload = {}
     payload["details"] = params
-    payload["paymentData"] = session[:payment_data]
+    payload["paymentData"] = Checkout.find_by(name: params["orderRef"]).payment_data
 
     resp = Checkout.submit_details(payload).response
 
-    session[:payment_data] = ""
-
     case resp["resultCode"]
-      when "Authorised"
-        redirect_to '/result/success'
-      when "Pending", "Received"
-        redirect_to '/result/pending'
-      when "Refused"
-        redirect_to '/result/failed'
-      else
-        redirect_to '/result/error'
+    when "Authorised"
+      redirect_to "/result/success"
+    when "Pending", "Received"
+      redirect_to "/result/pending"
+    when "Refused"
+      redirect_to "/result/failed"
+    else
+      redirect_to "/result/error"
     end
   end
 
