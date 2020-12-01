@@ -25,16 +25,16 @@ class CheckoutsController < ApplicationController
     # The call to /paymentMethods will be made as the checkout page is requested.
     # The response will be passed to the front end,
     # which will be used to configure the instance of `AdyenCheckout`
-    payment_methods_response = Checkout.get_payment_methods().response.to_json
+    response = Checkout.get_payment_methods()
 
-    render json: payment_methods_response
+    render json: response.response, status: response.status
   end
 
   def initiate_payment
     # The call to /payments will be made as the shopper selects the pay button.
-    payment_response = Checkout.make_payment(params["paymentMethod"], params["riskData"].to_json, params["browserInfo"].to_json, request.remote_ip).response
+    response = Checkout.make_payment(params["paymentMethod"], params["browserInfo"].to_json, request.remote_ip)
 
-    render json: payment_response
+    render json: response.response, status: response.status
   end
 
   def handle_shopper_redirect
@@ -42,9 +42,9 @@ class CheckoutsController < ApplicationController
     payload["details"] = params
     payload["paymentData"] = Checkout.find_by(name: params["orderRef"]).payment_data
 
-    resp = Checkout.submit_details(payload).response
+    response = Checkout.submit_details(payload).response
 
-    case resp["resultCode"]
+    case response["resultCode"]
     when "Authorised"
       redirect_to "/result/success"
     when "Pending", "Received"
@@ -61,8 +61,8 @@ class CheckoutsController < ApplicationController
     payload["details"] = params["details"]
     payload["paymentData"] = params["paymentData"]
 
-    resp = Checkout.submit_details(payload).response
+    response = Checkout.submit_details(payload)
 
-    render json: resp
+    render json: response.response, status: response.status
   end
 end

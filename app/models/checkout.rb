@@ -22,7 +22,7 @@ class Checkout < ApplicationRecord
 
     # Makes the /payments request
     # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/payments
-    def make_payment(payment_method, risk_data, browser_info, remote_ip)
+    def make_payment(payment_method, browser_info, remote_ip)
       currency = find_currency(payment_method["type"])
       order_ref = SecureRandom.uuid
 
@@ -44,10 +44,7 @@ class Checkout < ApplicationRecord
         # we pass the orderRef in return URL to get paymentData during redirects
         :returnUrl => "http://localhost:8080/api/handleShopperRedirect?orderRef=#{order_ref}", # required for 3ds2 redirect flow
         :paymentMethod => payment_method,  # required
-        :riskData => risk_data,
       }
-
-      print req
 
       response = adyen_client.checkout.payments(req)
 
