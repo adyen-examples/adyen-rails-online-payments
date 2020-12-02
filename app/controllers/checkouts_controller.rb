@@ -32,7 +32,7 @@ class CheckoutsController < ApplicationController
 
   def initiate_payment
     # The call to /payments will be made as the shopper selects the pay button.
-    response = Checkout.make_payment(params["paymentMethod"], params["browserInfo"].to_json, request.remote_ip)
+    response = Checkout.make_payment(params["paymentMethod"], params["browserInfo"], request.remote_ip)
 
     render json: response.response, status: response.status
   end

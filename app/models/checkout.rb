@@ -48,6 +48,9 @@ class Checkout < ApplicationRecord
 
       response = adyen_client.checkout.payments(req)
 
+      puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+      puts req.to_json
+
       if response.response.key?("action")
         # store paymentData for redirect handling
         Checkout.create(name: order_ref, payment_data: response.response["paymentData"])
