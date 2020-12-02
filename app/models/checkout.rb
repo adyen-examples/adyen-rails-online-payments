@@ -36,7 +36,7 @@ class Checkout < ApplicationRecord
         :reference => order_ref, # required
         :additionalData => {
           # required for 3ds2 native flow
-          :allow3DS2 => "true",
+          :allow3DS2 => true,
         },
         :origin => "http://localhost:8080", #required for 3ds2 native flow
         :browserInfo => browser_info, # required for 3ds2
