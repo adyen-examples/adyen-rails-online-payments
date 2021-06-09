@@ -6,7 +6,7 @@
 
 require "adyen-ruby-api-library"
 
-class Checkout < ApplicationRecord
+class Checkout
   class << self
 
     # Makes the /paymentMethods request
@@ -41,20 +41,15 @@ class Checkout < ApplicationRecord
         :origin => "http://localhost:8080", #required for 3ds2 native flow
         :browserInfo => browser_info, # required for 3ds2
         :shopperIP => remote_ip, # required by some issuers for 3ds2
-        # we pass the orderRef in return URL to get paymentData during redirects
         :returnUrl => "http://localhost:8080/api/handleShopperRedirect?orderRef=#{order_ref}", # required for 3ds2 redirect flow
         :paymentMethod => payment_method,  # required
       }
 
-      response = adyen_client.checkout.payments(req)
-
-      puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
       puts req.to_json
 
-      if response.response.key?("action")
-        # store paymentData for redirect handling
-        Checkout.create(name: order_ref, payment_data: response.response["paymentData"])
-      end
+      response = adyen_client.checkout.payments(req)
+
+      puts response.to_json
 
       response
     end
@@ -63,7 +58,7 @@ class Checkout < ApplicationRecord
     # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/payments/details
     def submit_details(details)
       response = adyen_client.checkout.payments.details(details)
-
+      puts response.to_json
       response
     end
 

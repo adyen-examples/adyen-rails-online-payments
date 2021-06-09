@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.2"
+ruby "2.7.3"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 5.2.3"
@@ -35,28 +35,18 @@ gem "jbuilder", "~> 2.5"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
-
 gem "faraday"
-
-gem "adyen-ruby-api-library"
-
+gem "adyen-ruby-api-library", ">= 5.0.0"
 gem "rubyzip", ">= 1.3.0"
-
 gem "nokogiri", ">= 1.10.8"
-
 gem "loofah", ">= 2.3.1"
-
 gem "rack", ">= 2.0.8"
-
 gem "websocket-extensions", ">= 0.1.5"
-
 gem "activesupport", ">= 5.2.4.3"
-
-gem "actionpack", ">= 5.2.4.3"
-
+gem "actionpack", ">= 5.2.4.6"
 gem "activestorage", ">= 5.2.4.3"
-
-gem "actionview", ">= 5.2.4.2"
+gem "activerecord", ">= 5.2.4.5"
+gem "actionview", ">= 5.2.4.4"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -39,8 +39,9 @@ class CheckoutsController < ApplicationController
 
   def handle_shopper_redirect
     payload = {}
-    payload["details"] = params
-    payload["paymentData"] = Checkout.find_by(name: params["orderRef"]).payment_data
+    payload["details"] = {
+      "redirectResult" => params["redirectResult"],
+    }
 
     response = Checkout.submit_details(payload).response
 
