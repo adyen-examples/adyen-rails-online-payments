@@ -66,3 +66,5 @@ We commit all our new features directly into our GitHub repository. Feel free to
 ## License
 
 MIT license. For more information, see the **LICENSE** file in the root directory.
+
+Find out more in our [Contributing](https://github.com/adyen-examples/.github/blob/main/CONTRIBUTING.md) guidelines.
