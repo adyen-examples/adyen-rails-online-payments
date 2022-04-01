@@ -1,4 +1,4 @@
-# Adyen [online payment](https://docs.adyen.com/checkout) integration demos
+s# Adyen [online payment](https://docs.adyen.com/checkout) integration demos
 
 This repository includes examples of PCI-compliant UI integrations for online payments with Adyen. Within this demo app, you'll find a simplified version of an e-commerce website, complete with commented code to highlight key features and concepts of Adyen's API. Check out the underlying code to see how you can integrate Adyen to give your shoppers the option to pay with their preferred payment methods, all in a seamless checkout experience.
 
@@ -23,7 +23,7 @@ Each demo leverages Adyen's API Library for Ruby ([GitHub](https://github.com/Ad
 
 ## Requirements
 
-Ruby 2.4.0+
+Ruby 3.1.1+
 
 ## Installation
 
