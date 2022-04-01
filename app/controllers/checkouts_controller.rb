@@ -22,7 +22,7 @@ class CheckoutsController < ApplicationController
   end
 
   def adyen_sessions
-    response = Checkout.adyen_sessions()
+    response = Checkout.adyen_session
 
     render json: response.response, status: response.status
   end

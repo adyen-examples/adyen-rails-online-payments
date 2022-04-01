@@ -9,7 +9,8 @@ require "adyen-ruby-api-library"
 class Checkout
   class << self
 
-    def adyen_sessions()
+    # Initiates the session
+    def adyen_session
       order_ref = SecureRandom.uuid
       req = {
         :amount => {
@@ -27,8 +28,7 @@ class Checkout
       response
     end
 
-    # Makes the /payments/details request
-    # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/payments/details
+    # Makes the payment redirect
     def submit_details(details)
       response = adyen_client.checkout.payments.details(details)
       puts response.to_json
