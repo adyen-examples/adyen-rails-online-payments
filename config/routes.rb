@@ -11,4 +11,7 @@ Rails.application.routes.draw do
   get 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
   post 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
   post 'api/sessions', :to => 'checkouts#adyen_sessions'
+
+  # Webhooks
+  post 'api/webhooks/notifications', :to => 'checkouts#adyen_webhooks'
 end

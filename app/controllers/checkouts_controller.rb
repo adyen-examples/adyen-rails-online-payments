@@ -1,4 +1,5 @@
 require "json"
+require "adyen-ruby-api-library"
 
 class CheckoutsController < ApplicationController
   def index
@@ -45,5 +46,11 @@ class CheckoutsController < ApplicationController
     else
       redirect_to "/result/error"
     end
+  end
+
+  def adyen_webhooks
+    notifications = params["notificationItems"]
+    response = Checkout.adyen_webhooks(notifications)
+    render json: response
   end
 end
