@@ -1,0 +1,25 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+- init: PATH="/home/gitpod/.rvm/ruby-2.7.3/bin:/home/gitpod/.rvm/ruby-2.7.3@global/bin:/home/gitpod/.rvm/rubies/ruby-2.7.3/bin:$PATH"
+        bundle install
+  command: |
+        PATH="/home/gitpod/.rvm/ruby-2.7.3/bin:/home/gitpod/.rvm/ruby-2.7.3@global/bin:/home/gitpod/.rvm/rubies/ruby-2.7.3/bin:$PATH"
+        unset DATABASE_URL
+        if [ -z ${ADYEN_HMAC_KEY+x} ] || [[ -z ${ADYEN_API_KEY+x} ]] || [[ -z ${ADYEN_CLIENT_KEY+x} ]] || [[ -z ${ADYEN_MERCHANT_ACCOUNT+x} ]]; then
+            echo "Expected environment variables not found. Please set the ADYEN_HMAC_KEY, ADYEN_API_KEY, ADYEN_CLIENT_KEY, ADYEN_MERCHANT_ACCOUNT environment variables and rerun session https://gitpod.io/variables."
+        else
+            bundle exec rails s
+        fi
+
+# exposed ports
+ports:
+- port: 8080
+  onOpen: open-preview
+- port: 5432
+  onOpen: ignore
+
+vscode:
+  extensions:
+    - rebornix.Ruby
