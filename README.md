@@ -1,4 +1,4 @@
-s# Adyen [online payment](https://docs.adyen.com/checkout) integration demos
+# Adyen [online payment](https://docs.adyen.com/checkout) integration demos
 
 This repository includes examples of PCI-compliant UI integrations for online payments with Adyen. Within this demo app, you'll find a simplified version of an e-commerce website, complete with commented code to highlight key features and concepts of Adyen's API. Check out the underlying code to see how you can integrate Adyen to give your shoppers the option to pay with their preferred payment methods, all in a seamless checkout experience.
 
@@ -44,6 +44,8 @@ bundle install
 1. Update **/config/local_env.yml** with your [API key](https://docs.adyen.com/user-management/how-to-get-the-api-key), [Client Key](https://docs.adyen.com/user-management/client-side-authentication) - Remember to add `http://localhost:8080` as an origin for client key, and merchant account name (all credentials are in string format):
 
 ```ruby
+PORT: "8080"
+HMAC_KEY: "YOUR_HMAC_KEY_HERE"
 API_KEY: "YOUR_API_KEY_HERE"
 MERCHANT_ACCOUNT: "YOUR_MERCHANT_ACCOUNT_HERE"
 CLIENT_KEY: "YOUR_CLIENT_KEY_HERE"
