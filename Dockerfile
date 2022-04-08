@@ -1,11 +1,9 @@
 FROM ruby:3.1.1
 
-RUN apt-get update -qq \ && apt-get install -y nodejs postgresql-client
+WORKDIR /app
 
-ADD . /Rails-Docker
-WORKDIR /Rails-Docker
 RUN bundle install
 
-Expose 5000
+COPY . .
 
-CMD ["bash]
+CMD [ "rails", "s" ]
