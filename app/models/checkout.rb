@@ -34,21 +34,18 @@ class Checkout
       puts response.to_json
       response
     end
+
     # Process incoming webhook notifications
     def adyen_webhooks(notifications)
       hmacKey = ENV["HMAC_KEY"]
       validator = Adyen::Utils::HmacValidator.new
       notifications.each do |notification|
         validationItem =  notification["NotificationRequestItem"]
-        puts " "
-        puts " "
-        puts validationItem
-        puts hmacKey
         if validator.valid_notification_hmac?(validationItem, hmacKey)
           puts validationItem["eventCode"]
           puts validationItem["merchantReference"]
         else
-          # invalid hmac: do not send [accepted] response
+          # In case of invalid hmac, do not send [accepted] response
           raise "Invalid HMAC Signature"
         end
       end

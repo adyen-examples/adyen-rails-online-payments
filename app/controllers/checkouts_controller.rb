@@ -1,5 +1,4 @@
 require "json"
-require "adyen-ruby-api-library"
 
 class CheckoutsController < ApplicationController
   def index

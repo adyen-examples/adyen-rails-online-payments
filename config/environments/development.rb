@@ -12,7 +12,7 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  # Allow for webhooks with ngrok
+  # Allow for testing webhooks on localhost with ngrok.io
   config.web_console.permissions = '82.199.90.162'
   config.hosts << /[a-z0-9-]+\.ngrok\.io/
 
