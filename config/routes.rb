@@ -8,9 +8,10 @@ Rails.application.routes.draw do
   get 'result/:type', :to => 'checkouts#result'
 
   # APIs
-  post 'api/getPaymentMethods', :to => 'checkouts#get_payment_methods'
-  post 'api/initiatePayment', :to => 'checkouts#initiate_payment'
   get 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
   post 'api/handleShopperRedirect', :to => 'checkouts#handle_shopper_redirect'
-  post 'api/submitAdditionalDetails', :to => 'checkouts#submit_additional_details'
+  post 'api/sessions', :to => 'checkouts#adyen_sessions'
+
+  # Webhook
+  post 'api/webhooks/notifications', :to => 'checkouts#adyen_webhooks'
 end
