@@ -8,4 +8,4 @@ RUN bundle install
 
 COPY . .
 
-CMD [ "rails", "s" ]
+CMD [ "bundle", "exec", "rails", "s" ]
