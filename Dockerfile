@@ -11,4 +11,4 @@ COPY . .
 
 CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
 
-EXPOSE 8080
+EXPOSE 3000
