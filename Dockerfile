@@ -11,3 +11,5 @@ RUN bundle install
 COPY . .
 
 CMD [ "bundle", "exec", "rails", "s" ]
+
+EXPOSE 3000
