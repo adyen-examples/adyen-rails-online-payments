@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY Gemfile ./
 
+RUN ruby-install 3.1.1
 RUN gem install bundle
 RUN gem install rails
 RUN bundle install
