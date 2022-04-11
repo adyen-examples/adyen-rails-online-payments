@@ -11,6 +11,8 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+      - name: Check IP
+        run: curl https://api.ipify.org
       - name: Checkout project
         uses: actions/checkout@v2
       - name: Build image (application)
