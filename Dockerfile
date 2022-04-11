@@ -1,14 +1,14 @@
 FROM ruby:3.1.1
 
 WORKDIR /app
-
 COPY . /app
 
-RUN gem install bundle
+RUN gem install bundler
+RUN gem install mini_racer
 RUN bundle install
 
 COPY . .
 
-CMD [ "bundle", "exec", "rails", "s" ]
-
 EXPOSE 3000
+
+CMD ["bundle", "exec", "rails", "s"]

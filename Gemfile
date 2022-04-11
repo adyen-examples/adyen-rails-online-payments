@@ -14,7 +14,6 @@ gem "sass-rails", "~> 5.1.0"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier", ">= 4.2.0"
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'mini_racer', platforms: :ruby
 gem 'mini_racer', '~> 0.6.2'
 
 # Use CoffeeScript for .coffee assets and views
