@@ -9,57 +9,47 @@ require "adyen-ruby-api-library"
 class Checkout
   class << self
 
-    # Makes the /paymentMethods request
-    # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/paymentMethods
-    def get_payment_methods()
-      response = adyen_client.checkout.payment_methods({
-        :merchantAccount => ENV["MERCHANT_ACCOUNT"],
-        :channel => "Web",
-      })
-
-      response
-    end
-
-    # Makes the /payments request
-    # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/payments
-    def make_payment(payment_method, browser_info, remote_ip)
-      currency = find_currency(payment_method["type"])
+    # Initiates the session
+    def adyen_session
       order_ref = SecureRandom.uuid
-
       req = {
-        :merchantAccount => ENV["MERCHANT_ACCOUNT"],
-        :channel => "Web", # required
         :amount => {
-          :currency => currency,
+          :currency => "EUR",
           :value => 1000, # value is 10€ in minor units
         },
-        :reference => order_ref, # required
-        :additionalData => {
-          # required for 3ds2 native flow
-          :allow3DS2 => true,
-        },
-        :origin => "http://localhost:8080", #required for 3ds2 native flow
-        :browserInfo => browser_info, # required for 3ds2
-        :shopperIP => remote_ip, # required by some issuers for 3ds2
-        :returnUrl => "http://localhost:8080/api/handleShopperRedirect?orderRef=#{order_ref}", # required for 3ds2 redirect flow
-        :paymentMethod => payment_method,  # required
+        :merchantAccount => ENV["ADYEN_MERCHANT_ACCOUNT"],
+        :reference => order_ref,
+        :returnUrl => "http://localhost:8080/api/handleShopperRedirect?orderRef=#{order_ref}",
+        :countryCode => "NL",
       }
-
       puts req.to_json
-
-      response = adyen_client.checkout.payments(req)
-
+      response = adyen_client.checkout.sessions(req)
       puts response.to_json
-
       response
     end
 
-    # Makes the /payments/details request
-    # https://docs.adyen.com/api-explorer/#/PaymentSetupAndVerificationService/payments/details
+    # Makes the payment redirect
     def submit_details(details)
       response = adyen_client.checkout.payments.details(details)
       puts response.to_json
       response
+    end
+
+    # Process incoming webhook notifications
+    def adyen_webhooks(notifications)
+      hmacKey = ENV["ADYEN_HMAC_KEY"]
+      validator = Adyen::Utils::HmacValidator.new
+      notifications.each do |notification|
+        validationItem =  notification["NotificationRequestItem"]
+        if validator.valid_notification_hmac?(validationItem, hmacKey)
+          puts validationItem["eventCode"]
+          puts validationItem["merchantReference"]
+        else
+          # In case of invalid hmac, do not send [accepted] response
+          raise "Invalid HMAC Signature"
+        end
+      end
+      "[accepted]"
     end
 
     private
@@ -70,24 +60,9 @@ class Checkout
 
     def instantiate_checkout_client
       adyen = Adyen::Client.new
-      adyen.api_key = ENV["API_KEY"]
+      adyen.api_key = ENV["ADYEN_API_KEY"]
       adyen.env = :test
       adyen
-    end
-
-    def find_currency(type)
-      case type
-      when "ach"
-        return "USD"
-      when "wechatpayqr", "alipay"
-        return "CNY"
-      when "dotpay"
-        return "PLN"
-      when "boletobancario"
-        return "BRL"
-      else
-        return "EUR"
-      end
     end
   end
 end
