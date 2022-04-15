@@ -10,7 +10,7 @@ class CheckoutsController < ApplicationController
 
   def checkout
     @type = params[:type]
-    @client_key = ENV["CLIENT_KEY"]
+    @client_key = ENV["ADYEN_CLIENT_KEY"]
 
     # The payment template (payment_template.html.erb) will be rendered with the
     # appropriate integration type (based on the params supplied).

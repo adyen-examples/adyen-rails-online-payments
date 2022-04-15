@@ -17,7 +17,7 @@ class Checkout
           :currency => "EUR",
           :value => 1000, # value is 10€ in minor units
         },
-        :merchantAccount => ENV["MERCHANT_ACCOUNT"],
+        :merchantAccount => ENV["ADYEN_MERCHANT_ACCOUNT"],
         :reference => order_ref,
         :returnUrl => "http://localhost:8080/api/handleShopperRedirect?orderRef=#{order_ref}",
         :countryCode => "NL",
@@ -37,7 +37,7 @@ class Checkout
 
     # Process incoming webhook notifications
     def adyen_webhooks(notifications)
-      hmacKey = ENV["HMAC_KEY"]
+      hmacKey = ENV["ADYEN_HMAC_KEY"]
       validator = Adyen::Utils::HmacValidator.new
       notifications.each do |notification|
         validationItem =  notification["NotificationRequestItem"]
@@ -60,7 +60,7 @@ class Checkout
 
     def instantiate_checkout_client
       adyen = Adyen::Client.new
-      adyen.api_key = ENV["API_KEY"]
+      adyen.api_key = ENV["ADYEN_API_KEY"]
       adyen.env = :test
       adyen
     end
