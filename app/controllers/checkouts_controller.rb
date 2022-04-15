@@ -10,7 +10,7 @@ class CheckoutsController < ApplicationController
 
   def checkout
     @type = params[:type]
-    @client_key = ENV["CLIENT_KEY"]
+    @client_key = ENV["ADYEN_CLIENT_KEY"]
 
     # The payment template (payment_template.html.erb) will be rendered with the
     # appropriate integration type (based on the params supplied).
@@ -21,18 +21,8 @@ class CheckoutsController < ApplicationController
     @type = params[:type]
   end
 
-  def get_payment_methods
-    # The call to /paymentMethods will be made as the checkout page is requested.
-    # The response will be passed to the front end,
-    # which will be used to configure the instance of `AdyenCheckout`
-    response = Checkout.get_payment_methods()
-
-    render json: response.response, status: response.status
-  end
-
-  def initiate_payment
-    # The call to /payments will be made as the shopper selects the pay button.
-    response = Checkout.make_payment(params["paymentMethod"], params["browserInfo"], request.remote_ip)
+  def adyen_sessions
+    response = Checkout.adyen_session
 
     render json: response.response, status: response.status
   end
@@ -57,13 +47,9 @@ class CheckoutsController < ApplicationController
     end
   end
 
-  def submit_additional_details
-    payload = {}
-    payload["details"] = params["details"]
-    payload["paymentData"] = params["paymentData"]
-
-    response = Checkout.submit_details(payload)
-
-    render json: response.response, status: response.status
+  def adyen_webhooks
+    notifications = params["notificationItems"]
+    response = Checkout.adyen_webhooks(notifications)
+    render json: response
   end
 end

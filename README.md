@@ -36,7 +36,7 @@ Each demo leverages Adyen's API Library for Ruby ([GitHub](https://github.com/Ad
 
 ## Requirements
 
-Ruby 2.4.0+
+Ruby 3.1.1+
 
 ## Installation
 
@@ -57,9 +57,11 @@ bundle install
 1. Update **/config/local_env.yml** with your [API key](https://docs.adyen.com/user-management/how-to-get-the-api-key), [Client Key](https://docs.adyen.com/user-management/client-side-authentication) - Remember to add `http://localhost:8080` as an origin for client key, and merchant account name (all credentials are in string format):
 
 ```ruby
-API_KEY: "YOUR_API_KEY_HERE"
-MERCHANT_ACCOUNT: "YOUR_MERCHANT_ACCOUNT_HERE"
-CLIENT_KEY: "YOUR_CLIENT_KEY_HERE"
+PORT: "8080"
+ADYEN_HMAC_KEY: "YOUR_HMAC_KEY_HERE"
+ADYEN_API_KEY: "YOUR_API_KEY_HERE"
+ADYEN_MERCHANT_ACCOUNT: "YOUR_MERCHANT_ACCOUNT_HERE"
+ADYEN_CLIENT_KEY: "YOUR_CLIENT_KEY_HERE"
 ```
 
 2. Start the rails server (and run any migrations if prompted):
