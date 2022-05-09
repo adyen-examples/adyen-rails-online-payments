@@ -10,8 +10,9 @@ class Checkout
   class << self
 
     # Initiates the session
-    def adyen_session
+    def adyen_session(localhost)
       order_ref = SecureRandom.uuid
+      
       req = {
         :amount => {
           :currency => "EUR",
@@ -19,7 +20,7 @@ class Checkout
         },
         :merchantAccount => ENV["ADYEN_MERCHANT_ACCOUNT"],
         :reference => order_ref,
-        :returnUrl => "http://localhost:8080/api/handleShopperRedirect?orderRef=#{order_ref}",
+        :returnUrl => "#{localhost}/api/handleShopperRedirect?orderRef=#{order_ref}",
         :countryCode => "NL",
       }
       puts req.to_json
