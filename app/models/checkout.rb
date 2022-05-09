@@ -12,7 +12,6 @@ class Checkout
     # Initiates the session
     def adyen_session(localhost)
       order_ref = SecureRandom.uuid
-      
       req = {
         :amount => {
           :currency => "EUR",
