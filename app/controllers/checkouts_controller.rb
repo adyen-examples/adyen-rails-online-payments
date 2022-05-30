@@ -22,7 +22,8 @@ class CheckoutsController < ApplicationController
   end
 
   def adyen_sessions
-    response = Checkout.adyen_session
+    url = request.base_url
+    response = Checkout.adyen_session(url)
 
     render json: response.response, status: response.status
   end

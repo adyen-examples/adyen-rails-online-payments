@@ -16,6 +16,10 @@ Rails.application.configure do
   config.web_console.permissions = '82.199.90.162'
   config.hosts << /[a-z0-9-]+\.ngrok\.io/
 
+  # Allow gitpod support
+  config.web_console.permissions = '10.20.58.74'
+  config.hosts << /[a-z0-9-]+\.[a-z0-9-]+\.gitpod\.io/
+  
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
@@ -47,6 +51,8 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+
+  config.active_record.legacy_connection_handling = false
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large

@@ -17,7 +17,7 @@ module Dropin
     end
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 7.0
 
     #  No checking the authenticity of a certain token for POST requests
     config.action_controller.default_protect_from_forgery = false
@@ -28,4 +28,3 @@ module Dropin
     # the framework and any gems in your application.
   end
 end
-
