@@ -11,7 +11,7 @@ gem "sqlite3", "1.4.2"
 # Use Puma as the app server
 gem "puma", ">= 5.6.4"
 # Use SCSS for stylesheets
-gem "sass-rails", "~> 5.1.0"
+gem "sass-rails", "~> 6.0.0"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier", ">= 4.2.0"
 # See https://github.com/rails/execjs#readme for more supported runtimes
