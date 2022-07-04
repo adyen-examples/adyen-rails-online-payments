@@ -37,3 +37,5 @@ bundle.js.map
 .DS_Store
 npm-debug.log
 vendor/bundle
+
+config/local_env.yml
