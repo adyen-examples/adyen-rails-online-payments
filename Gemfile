@@ -37,7 +37,7 @@ gem "jbuilder", "~> 2.11.5"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.11.1", require: false
 gem "faraday"
-gem "adyen-ruby-api-library", ">= 6.0.0"
+gem "adyen-ruby-api-library", ">= 6.1.0"
 gem "rubyzip", ">= 1.3.0"
 gem "nokogiri", ">= 1.13.3"
 gem "loofah", ">= 2.15.0"
