@@ -39,3 +39,4 @@ npm-debug.log
 vendor/bundle
 
 config/local_env.yml
+Gemfile.lock
