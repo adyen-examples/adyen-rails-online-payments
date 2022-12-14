@@ -25,12 +25,12 @@ class Checkout
         :lineItems => [
           {
             :quantity => 1,
-            :amountIncludingTax => 5000, # value is 10€ in minor units
+            :amountIncludingTax => 5000, # value is 50€ in minor units
             :description => "Sunglasses"
           },
           {
             :quantity => 1,
-            :amountIncludingTax => 5000, # value is 10€ in minor units
+            :amountIncludingTax => 5000, # value is 50€ in minor units
             :description => "Headphones"
           }
         ]
