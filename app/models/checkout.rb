@@ -21,6 +21,19 @@ class Checkout
         :reference => order_ref,
         :returnUrl => "#{localhost}/api/handleShopperRedirect?orderRef=#{order_ref}",
         :countryCode => "NL",
+        # lineItems required for some payment methods (ie Klarna)
+        :lineItems => [
+          {
+            :quantity => 1,
+            :amountIncludingTax => 5000, # value is 50€ in minor units
+            :description => "Sunglasses"
+          },
+          {
+            :quantity => 1,
+            :amountIncludingTax => 5000, # value is 50€ in minor units
+            :description => "Headphones"
+          }
+        ]
       }
       puts req.to_json
       response = adyen_client.checkout.sessions(req)
