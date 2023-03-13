@@ -17,7 +17,7 @@
 !/log/.keep
 !/tmp/.keep
 
-# Ignore uploaded files in development
+# Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
 
@@ -40,3 +40,6 @@ vendor/bundle
 
 config/local_env.yml
 Gemfile.lock
+
+# Ignore project configuration in Rider IDE.
+.idea
