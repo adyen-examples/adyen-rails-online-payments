@@ -36,14 +36,14 @@ class Checkout
         ]
       }
       puts req.to_json
-      response = adyen_client.checkout.sessions(req)
+      response = adyen_client.checkout.payments_api.sessions(req)
       puts response.to_json
       response
     end
 
     # Makes the payment redirect
     def submit_details(details)
-      response = adyen_client.checkout.payments.details(details)
+      response = adyen_client.checkout.payments_api.payments_details(details)
       puts response.to_json
       response
     end
