@@ -55,9 +55,9 @@ class Checkout
       # JSON and HTTP POST notifications always contain a single NotificationRequestItem object, see https://docs.adyen.com/development-resources/webhooks/understand-notifications#notification-structure
       notification = notifications.first()["NotificationRequestItem"]
       # We recommend to always validate the HMAC, see also https://docs.adyen.com/development-resources/webhooks/verify-hmac-signatures
-      if validator.valid_notification_hmac?(validationItem, hmacKey)
-        puts validationItem["eventCode"]
-        puts validationItem["merchantReference"]
+      if validator.valid_notification_hmac?(notification, hmacKey)
+        puts notification["eventCode"]
+        puts notification["merchantReference"]
         "[accepted]"
       else
         # In case of invalid hmac, do not send [accepted] response
