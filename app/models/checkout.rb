@@ -43,7 +43,7 @@ class Checkout
 
     # Makes the payment redirect
     def submit_details(details)
-      response = adyen_client.checkout.payments.details(details)
+      response = adyen_client.checkout.payments_api.payments_details(details)
       puts response.to_json
       response
     end

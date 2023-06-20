@@ -15,6 +15,7 @@ Rails.application.configure do
   # Allow for testing webhooks on localhost with ngrok.io
   config.web_console.permissions = '82.199.90.162'
   config.hosts << /[a-z0-9-]+\.ngrok\.io/
+  config.hosts << /[a-z0-9-]+\.ngrok-free\.app/
 
   # Allow gitpod support
   config.web_console.permissions = '10.20.58.74'
