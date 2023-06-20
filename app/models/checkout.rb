@@ -36,7 +36,7 @@ class Checkout
         ]
       }
       puts req.to_json
-      response = adyen_client.checkout.sessions(req)
+      response = adyen_client.checkout.payments_api.sessions(req)
       puts response.to_json
       response
     end
