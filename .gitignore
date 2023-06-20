@@ -44,3 +44,6 @@ Gemfile.lock
 # Ignore project configuration in Rider IDE.
 .idea
 .env
+
+# Visual Studio
+.vs

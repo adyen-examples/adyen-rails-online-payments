@@ -7,7 +7,7 @@ ruby "~> 3.1.1"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 7.0.3"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "1.6.2"
+gem "sqlite3", "1.6.3"
 # Use Puma as the app server
 gem "puma", ">= 5.6.4"
 # Use SCSS for stylesheets
@@ -15,7 +15,7 @@ gem "sass-rails", "~> 6.0.0"
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier", ">= 4.2.0"
 # See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'mini_racer', '~> 0.6.2'
+gem 'mini_racer', '~> 0.8.0'
 
 # Use CoffeeScript for .coffee assets and views
 gem "coffee-rails", "~> 5.0.0"
