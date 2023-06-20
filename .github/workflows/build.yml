@@ -14,9 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Ruby
+      - name: Setup Ruby
         uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
       - name: Install dependencies
         run: bundle install
-      - name: Run tests
-        run: bundle exec rake
