@@ -58,9 +58,10 @@ class Checkout
       if validator.valid_notification_hmac?(notification, hmacKey)
         puts notification["eventCode"]
         puts notification["merchantReference"]
-        "[accepted]"
+        # Send a 202 response with an empty body
+        [202, {}, ['']]
       else
-        # In case of invalid hmac, do not send [accepted] response
+        # In case of invalid hmac
         raise "Invalid HMAC Signature"
       end
     end
