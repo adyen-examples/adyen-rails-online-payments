@@ -51,6 +51,7 @@ class CheckoutsController < ApplicationController
   def adyen_webhooks
     notifications = params["notificationItems"]
     response = Checkout.adyen_webhooks(notifications)
-    render json: response
+    # Return 202 with empty body
+    render status: 202, body: ''
   end
 end
