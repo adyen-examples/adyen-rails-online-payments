@@ -59,7 +59,7 @@ class Checkout
         puts notification["eventCode"]
         puts notification["merchantReference"]
         # Send a 202 response with an empty body
-        return [202, {}, ['']]
+        "Ok"
       else
         # In case of invalid hmac
         raise "Invalid HMAC Signature"
