@@ -61,10 +61,10 @@ bundle install
 
 ```yaml
 PORT: "8080"
-ADYEN_HMAC_KEY: "your_adyen_hmac_key"
-ADYEN_API_KEY: "your_adyen_api_key"
-ADYEN_MERCHANT_ACCOUNT: "your_adyen_merchant_account"
-ADYEN_CLIENT_KEY: "your_adyen_client_key"
+ADYEN_HMAC_KEY: "YOUR_HMAC_KEY_HERE"
+ADYEN_API_KEY: "YOUR_API_KEY_HERE"
+ADYEN_MERCHANT_ACCOUNT: "YOUR_MERCHANT_ACCOUNT_HERE"
+ADYEN_CLIENT_KEY: "YOUR_CLIENT_KEY_HERE"
 ```
 
 4. Configure allowed origins (CORS)
