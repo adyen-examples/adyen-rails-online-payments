@@ -23,6 +23,7 @@ Rails.application.configure do
   
   # Allow GitHub Codespaces support
   config.hosts << /[a-z0-9-]+-[0-9]+\.preview\.app\.github\.dev/
+  config.hosts << /[a-z0-9-]+-[0-9]+\.app\.github\.dev/
   config.hosts << /[a-z0-9-]+\.github\.dev/
   
   # Enable/disable caching. By default caching is disabled.
