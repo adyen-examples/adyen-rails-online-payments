@@ -21,6 +21,10 @@ Rails.application.configure do
   config.web_console.permissions = '10.20.58.74'
   config.hosts << /[a-z0-9-]+\.[a-z0-9-]+\.gitpod\.io/
   
+  # Allow GitHub Codespaces support
+  config.hosts << /[a-z0-9-]+-[0-9]+\.preview\.app\.github\.dev/
+  config.hosts << /[a-z0-9-]+\.github\.dev/
+  
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?

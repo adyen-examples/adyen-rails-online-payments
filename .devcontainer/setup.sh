@@ -8,10 +8,9 @@ echo "Setting up Adyen Rails Online Payments..."
 echo "Installing Ruby dependencies..."
 bundle install
 
-# The project uses 'sqlite3' so we need to create and migrate the database
+# The project uses 'sqlite3' so we need to create and set up the database
 echo "Setting up the database..."
-bundle exec rails db:create
-bundle exec rails db:migrate
+bundle exec rails db:setup
 
 echo ""
 echo "Setup complete!"
