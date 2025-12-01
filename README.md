@@ -1,10 +1,12 @@
-# Adyen [online payment](https://docs.adyen.com/online-payments) integration demos
+# Adyen Rails [Online Payment](https://docs.adyen.com/online-payments) integration demos
 
 ## Details
 
 This repository includes examples of PCI-compliant UI integrations for online payments with Adyen. Within this demo app, you'll find a simplified version of an e-commerce website, complete with commented code to highlight key features and concepts of Adyen's API. Check out the underlying code to see how you can integrate Adyen to give your shoppers the option to pay with their preferred payment methods, all in a seamless checkout experience.
 
 ![Card checkout demo](app/assets/images/cardcheckout.gif)
+
+The demo leverages Adyen's API Library for Ruby ([GitHub](https://github.com/Adyen/adyen-ruby-api-library) | [Docs](https://docs.adyen.com/development-resources/libraries?tab=ruby_6_7#ruby)).
 
 ## Supported Integrations
 
@@ -21,13 +23,21 @@ This repository includes examples of PCI-compliant UI integrations for online pa
   - SEPA Direct Debit
   - SOFORT
 
-Each demo leverages Adyen's API Library for Ruby ([GitHub](https://github.com/Adyen/adyen-ruby-api-library) | [Docs](https://docs.adyen.com/development-resources/libraries#ruby)). See **app/models/checkout.rb** for payment methods.
+See **app/models/checkout.rb** for payment methods.
 
 ## Requirements
 
 Ruby 3.1.1+
 
-## Installation
+## Quick Start with GitHub Codespaces
+
+This repository is configured to work with [GitHub Codespaces](https://github.com/features/codespaces). Click the badge below to launch a Codespace with all dependencies pre-installed.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new/adyen-examples/adyen-rails-online-payments?ref=main&devcontainer_path=.devcontainer%2Fdevcontainer.json)
+
+For detailed setup instructions, see the [GitHub Codespaces Instructions](https://github.com/adyen-examples/.github/blob/main/pages/codespaces-instructions.md).
+
+## Local Installation
 
 1. Clone this repo:
 
@@ -41,36 +51,52 @@ git clone https://github.com/adyen-examples/adyen-rails-online-payments.git
 bundle install
 ```
 
-## Usage
+3. Update **config/local_env.yml** with your credentials. You can also set the following environment variables in your terminal:
 
-1. Update **/config/local_env.yml** with your [API key](https://docs.adyen.com/user-management/how-to-get-the-api-key), [Client Key](https://docs.adyen.com/user-management/client-side-authentication) - Remember to add `http://localhost:8080` as an origin for client key, and merchant account name (all credentials are in string format):
+  - PORT (default 8080)
+  - [API key](https://docs.adyen.com/user-management/how-to-get-the-api-key)
+  - [Client Key](https://docs.adyen.com/user-management/client-side-authentication)
+  - [Merchant Account](https://docs.adyen.com/account/account-structure)
+  - [HMAC Key](https://docs.adyen.com/development-resources/webhooks/verify-hmac-signatures)
 
-```ruby
+```yaml
 PORT: "8080"
-ADYEN_HMAC_KEY: "YOUR_HMAC_KEY_HERE"
-ADYEN_API_KEY: "YOUR_API_KEY_HERE"
-ADYEN_MERCHANT_ACCOUNT: "YOUR_MERCHANT_ACCOUNT_HERE"
-ADYEN_CLIENT_KEY: "YOUR_CLIENT_KEY_HERE"
+ADYEN_HMAC_KEY: "your_adyen_hmac_key"
+ADYEN_API_KEY: "your_adyen_api_key"
+ADYEN_MERCHANT_ACCOUNT: "your_adyen_merchant_account"
+ADYEN_CLIENT_KEY: "your_adyen_client_key"
 ```
 
-2. Start the rails server (and run any migrations if prompted):
+4. Configure allowed origins (CORS)
+- It is required to specify the domain or URL of the web applications that will make requests to Adyen. In the Customer Area, add `http://localhost:8080` in the list of Allowed Origins associated with the Client Key.
+
+5. Start the server (and run any migrations if prompted):
 
 ```
 bundle exec rails s
 ```
 
-3. Visit [http://localhost:8080/](http://localhost:8080/) (**app/views/checkouts/index.html.erb**) to select an integration type.
+6. Visit [http://localhost:8080/](http://localhost:8080/) and select an integration type.
 
 To try out integrations with test card numbers and payment method details, see [Test card numbers](https://docs.adyen.com/development-resources/test-cards/test-card-numbers).
 
-## Testing webhooks
+# Webhooks
 
-Webhooks deliver asynchronous notifications and it is important to test them during the setup of your integration. You can find more information about webhooks in [this detailed blog post](https://www.adyen.com/blog/Integrating-webhooks-notifications-with-Adyen-Checkout).
+Webhooks deliver asynchronous notifications about the payment status and other events that are important to receive and process. 
 
-This sample application provides a simple webhook integration exposed at `/api/webhooks/notifications`. For it to work, you need to:
+You can find more information about webhooks in [this blog post](https://www.adyen.com/blog/Integrating-webhooks-notifications-with-Adyen-Checkout).
 
-1. Provide a way for the Adyen platform to reach your running application
-2. Add a Standard webhook in your Customer Area
+### Webhook setup
+
+In the Customer Area under the `Developers → Webhooks` section, [create](https://docs.adyen.com/development-resources/webhooks/#set-up-webhooks-in-your-customer-area) a new `Standard webhook`.
+
+A good practice is to set up basic authentication, copy the generated HMAC Key and set it as an environment variable. The application will use this to verify the [HMAC signatures](https://docs.adyen.com/development-resources/webhooks/verify-hmac-signatures/).
+
+Make sure the webhook is **enabled**, so it can receive notifications.
+
+### Expose an endpoint
+
+This demo provides a simple webhook implementation exposed at `/api/webhooks/notifications` that shows you how to receive, validate and consume the webhook payload.
 
 ### Making your server reachable
 
@@ -102,24 +128,20 @@ If you use a tunneling service like [ngrok](ngrok) the webhook URL will be the g
 
 **Note:** when restarting ngrok a new URL is generated, make sure to **update the Webhook URL** in the Customer Area
 
-### Set up a webhook
+### Test your webhook
 
-* In the Customer Area go to Developers -> Webhooks and create a new 'Standard notification' webhook.
-* Enter the URL of your application/endpoint (see options [above](#making-your-server-reachable))
-* Define username and password for Basic Authentication
-* Generate the HMAC Key
-* Optionally, in Additional Settings, add the data you want to receive. A good example is 'Payment Account Reference'.
-* Make sure the webhook is **Enabled** (therefore it can receive the notifications)
+The following webhooks `events` should be enabled:
 
-That's it! Every time you perform a new payment, your application will receive a notification from the Adyen platform.
+* **AUTHORISATION**
 
+To make sure that the Adyen platform can reach your application, we have written a [Webhooks Testing Guide](https://github.com/adyen-examples/.github/blob/main/pages/webhooks-testing.md) that explores several options on how you can easily achieve this (e.g. running on localhost or cloud).
 
 ## Contributing
 
 We commit all our new features directly into our GitHub repository. Feel free to request or suggest new features or code changes yourself as well!
 
+Find out more in our [Contributing](https://github.com/adyen-examples/.github/blob/main/CONTRIBUTING.md) guidelines.
+
 ## License
 
 MIT license. For more information, see the **LICENSE** file in the root directory.
-
-Find out more in our [Contributing](https://github.com/adyen-examples/.github/blob/main/CONTRIBUTING.md) guidelines.
