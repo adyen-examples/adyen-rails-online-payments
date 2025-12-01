@@ -15,12 +15,12 @@
     }
   },
   "portsAttributes": {
-    "3000": {
+    "8080": {
       "label": "Rails App",
       "onAutoForward": "notify"
     }
   },
   "forwardPorts": [
-    3000
+    8080
   ]
 }
