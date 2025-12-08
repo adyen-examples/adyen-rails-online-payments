@@ -1,0 +1,26 @@
+{
+  "name": "Adyen Rails Online Payments",
+  "image": "mcr.microsoft.com/devcontainers/ruby:3.1",
+  
+  "postCreateCommand": "gem install bundler",
+  "postAttachCommand": "bash .devcontainer/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rebornix.Ruby",
+        "Shopify.ruby-lsp",
+        "KoichiSasada.vscode-rdbg",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "portsAttributes": {
+    "8080": {
+      "label": "Rails App",
+      "onAutoForward": "notify"
+    }
+  },
+  "forwardPorts": [
+    8080
+  ]
+}
