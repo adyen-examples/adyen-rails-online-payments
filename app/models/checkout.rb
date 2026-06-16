@@ -7,7 +7,6 @@
 require "adyen-ruby-api-library"
 
 class Checkout
-
   class << self
 
     # Initiates the session
