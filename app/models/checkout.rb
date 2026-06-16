@@ -7,7 +7,6 @@
 require "adyen-ruby-api-library"
 
 class Checkout
-  ADYEN_WEB_VERSION = "5.68.0"
 
   class << self
 
@@ -78,7 +77,7 @@ class Checkout
       adyen = Adyen::Client.new
       adyen.api_key = ENV["ADYEN_API_KEY"]
       adyen.env = :test
-      adyen.application_name = "adyen-rails-online-payments checkout-example adyen-web/#{ADYEN_WEB_VERSION}"
+      adyen.application_name = "[adyen-rails-online-payments checkout-example adyen-web/5.68.0]"
       adyen
     end
   end
