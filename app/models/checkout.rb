@@ -76,6 +76,7 @@ class Checkout
       adyen = Adyen::Client.new
       adyen.api_key = ENV["ADYEN_API_KEY"]
       adyen.env = :test
+      adyen.application_name = "[adyen-rails-online-payments checkout-example adyen-web/5.68.0]"
       adyen
     end
   end
